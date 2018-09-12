@@ -182,6 +182,8 @@ public class Allocator{
 			return false;
 		if( quota.name.equals("UR") )
 			return true;
+		if( quota.name.equals(candidate.category) )
+			return true;
 		if( quota.name.equals("PWD") && candidate.isPwD )
 			return true;
 		if( quota.name.equals( candidate.specialCategory ) )
