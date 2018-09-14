@@ -22,9 +22,14 @@ public class Allocator{
 	static List<String> priority;
 	static Map<String,Integer> quotaPriority;
 
+	/*
 	static double URCuttOff = 371.00;
 	static double PwDCuttOff = 353.00;
 	static double OBCSCSTCuttOff = 334.00;
+	*/
+	static double URCuttOff = 0.00;
+	static double PwDCuttOff = 0.00;
+	static double OBCSCSTCuttOff = 0.00;
 
 	Allocator(){
 
