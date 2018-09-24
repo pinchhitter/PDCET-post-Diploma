@@ -101,7 +101,7 @@ class Course{
 	void headerCourseSeatMatrix(){
 		System.out.print("Hospital Id, Hospital Name And Address, State, speciality code, speciality, Total Seat, TotalAccepted");
 		for(String key: quotas.keySet() ){
-			System.out.print(", "+key+"-Opening, "+key+"-Closing");
+			System.out.print(", "+key+"-AvilableSeat");
 
 		}	
 		System.out.println();	

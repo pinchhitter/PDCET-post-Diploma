@@ -296,12 +296,8 @@ public class Allocator{
 
 	boolean allocate(Candidate candidate){
 
-		if( !isValidMarks(candidate ) ){
-			System.err.println(candidate.applicationId+", "+candidate.score+" NO enough to Qualify "+candidate.category+", "+candidate.isPwD+", "+candidate.score);
-			return false;
-		}
-		
 		boolean allocated = false;
+
 		int lastChoiceNumber=0;
 
 		Integer allocatedChoiceNumber = candidate.allocatedChoice;
@@ -613,8 +609,10 @@ public class Allocator{
 			if(LastRoundFile != null)
 			{
 				allocator.lastRound(LastRoundFile,true);
-				if(remaningSeatMatrix)
+				if( remaningSeatMatrix ){
 					allocator.printCourseSeatMatrix();
+					System.exit(0);
+				}	
 			}
 			
 			

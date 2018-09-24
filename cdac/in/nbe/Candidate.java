@@ -113,13 +113,11 @@ class Candidate{
 	}
 
 	public void printDNBiew() {
-		// TODO Auto-generated method stub
-		System.out.println(applicationId+","+rank+","+allocatedCourse.getHospitalNameAddress()+","+allocatedCourse.stateId+","+allocatedCourse.getSpeciality()+","+allocatedQuota.name);
+		System.out.println(applicationId+", "+rank+", "+category+", "+allocatedQuota.name+", "+allocatedCourse.courseId+", "+allocatedCourse.getSpeciality()+", "+ allocatedCourse.getHospitalNameAddress()+", "+allocatedCourse.stateId);
 	}
 
 	public static void printAllocationDNBViewHeader() {
-		// TODO Auto-generated method stub
-		System.out.println("Roll Number,Merit Position,Name of the Allotted Institute/Hospital,State,Specialty,Allocated-Quota");
+		System.out.println("Roll Number, Rank, Seat-Category, Allocated-Quota, Seat-Allocated, Specialty,  Name of the Institute/Hospital, State");
 	}
 
 	@Override
