@@ -14,6 +14,8 @@ import java.util.TreeMap;
 public class Allocator{
 
 	List<Candidate> candidates;
+	List<String> specialCat;
+	List<String> mainQuota = new ArrayList<String>();
 	Map<String, Course> courses;
 	Map<String,Course> lastRoundAllocation ;
 	Map<String,Integer> noFoundCourses = new TreeMap<String,Integer>();
@@ -34,8 +36,20 @@ public class Allocator{
 	Allocator(){
 
 		candidates = new ArrayList<Candidate>();
+		specialCat = new ArrayList<String>();
 		courses = new TreeMap<String, Course>();
 		priority = new ArrayList<String>();
+
+		mainQuota.add("UR");
+		mainQuota.add("URWo");
+		mainQuota.add("OBC");
+		mainQuota.add("OBCWo");
+		mainQuota.add("SC");
+		mainQuota.add("SCWo");
+		mainQuota.add("ST");
+		mainQuota.add("STWo");
+		mainQuota.add("PWD");
+		mainQuota.add("PWDWo");
 
 		priority.add("UR");
 		priority.add("URWo");
@@ -79,6 +93,33 @@ public class Allocator{
 		quotaPriority.put("MBC/DC", 8);
 
 	}
+
+	void readSpecialCat(String filename, boolean header){
+
+		if( filename == null)
+		return;
+	
+		BufferedReader br = null; 
+		int count = 0;
+		String line = null;
+
+		try{
+			br = new BufferedReader(new FileReader( new File(filename) ) );
+			while( (line = br.readLine() ) != null ){
+				if( header ){
+					header = false;
+					continue;
+				}
+				count++;
+				specialCat.add( line.trim() );
+				
+			}
+			System.err.println("Total Special Catgeory Candidate: "+(count));
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+
 	
 	void readCourses(String filename, boolean header){
 
@@ -182,6 +223,11 @@ public class Allocator{
 	}
 
 	boolean isValidQuotaAllocation(Quota quota, Candidate candidate){
+
+		if( specialCat.contains( candidate.applicationId ) && ! mainQuota.contains( quota.name ) ){
+			//System.err.println( candidate.applicationId +", "+quota.name + ", "+candidate.specialCategory);	
+			return false;
+		}	
 
 		if( quota == null)
 			return false;
@@ -546,6 +592,8 @@ public class Allocator{
 			String courseFile = null;
 			String candidateFile = null;
 			String LastRoundFile = null;
+
+			String specialCatFile = null;
 			String round = null;
 			boolean tableView = false;
 			boolean DNBView = false;
@@ -559,6 +607,9 @@ public class Allocator{
 			while( i < args.length ){
 				if( args[i].equals("-c") || args[i].equals("-C") ){
 					courseFile = args[i+1].trim();
+					i++;
+				}else if( args[i].equals("-sp") || args[i].equals("-SP") ){
+					specialCatFile = args[i+1].trim();
 					i++;
 				}else if( args[i].equals("-a") || args[i].equals("-A") ){
 					candidateFile = args[i+1].trim();
@@ -603,6 +654,7 @@ public class Allocator{
 			}
 
 			Allocator allocator = new Allocator();
+			allocator.readSpecialCat( specialCatFile, true)	;
 			allocator.readCourses(courseFile, true);
 			allocator.readCandidate(candidateFile, true);
 			
@@ -695,6 +747,7 @@ public class Allocator{
 
 	public static void optionsOfTheProgram() {
 		System.out.println("Following are the options of the Allocation Application : ");
+		System.out.println("-[sp,SP] <specialCatgeoryFile>  : Candidate who will be not be consider for allocation in Special Category");
 		System.out.println("-[c,C] <courseFile>  : Course seat matrix file path");
 		System.out.println("-[a,A] <applicantFile> : Applicant data with choices file path");
 		System.out.println("-r [roundVal] : round value");
@@ -709,7 +762,6 @@ public class Allocator{
 	}
 
 	private void pritntNotAllocatedCandidates() {
-		// TODO Auto-generated method stub
 		for(Candidate candidate: candidates){
 			if(! candidate.isAllocated ){
 				candidate.print();
